@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Learn — WrenPath</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">WrenPath</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="learn.html" class="nav-active">Learn</a>
+      <a href="tool.html" class="nav-cta">Try the Tool</a>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <h1>Learn</h1>
+    <p class="tagline">Understand your resume before you touch a template.</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <div id="article-list" class="article-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>WrenPath is a non-profit tool. We don't store your resume or job posting after your session ends.</p>
+  </footer>
+
+  <script src="learn-data.js"></script>
+  <script>
+    const list = document.getElementById("article-list");
+    ARTICLES.forEach((a) => {
+      const div = document.createElement("a");
+      div.className = "article-card";
+      div.href = `article.html?slug=${a.slug}`;
+      div.innerHTML = `<strong>${a.title}</strong><span>${a.summary}</span>`;
+      list.appendChild(div);
+    });
+  </script>
+</body>
+</html>

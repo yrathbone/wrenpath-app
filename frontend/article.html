@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Article — WrenPath</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">WrenPath</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="learn.html" class="nav-active">Learn</a>
+      <a href="tool.html" class="nav-cta">Try the Tool</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="card">
+      <div id="video-slot"></div>
+      <div id="article-body" class="article-body">
+        <p class="hint">Loading...</p>
+      </div>
+      <a href="learn.html" class="btn-secondary">&larr; Back to Learn</a>
+    </section>
+  </main>
+
+  <footer>
+    <p>WrenPath is a non-profit tool. We don't store your resume or job posting after your session ends.</p>
+  </footer>
+
+  <script src="learn-data.js"></script>
+  <script src="markdown.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get("slug");
+    const bodyEl = document.getElementById("article-body");
+    const videoSlot = document.getElementById("video-slot");
+
+    const meta = ARTICLES.find((a) => a.slug === slug);
+
+    if (!slug || !meta) {
+      bodyEl.innerHTML = "<p>That article doesn't exist. <a href=\"learn.html\">Back to Learn</a>.</p>";
+    } else {
+      document.title = `${meta.title} — WrenPath`;
+
+      if (meta.video_youtube_id) {
+        videoSlot.innerHTML = `
+          <div class="video-embed">
+            <iframe src="https://www.youtube.com/embed/${meta.video_youtube_id}"
+                    title="${meta.title}" allowfullscreen></iframe>
+          </div>`;
+      }
+
+      fetch(`articles/${slug}.md`)
+        .then((res) => {
+          if (!res.ok) throw new Error("Article file not found.");
+          return res.text();
+        })
+        .then((md) => {
+          bodyEl.innerHTML = renderMarkdown(md);
+        })
+        .catch((err) => {
+          bodyEl.innerHTML = `<p>Couldn't load this article. ${err.message}</p>`;
+        });
+    }
+  </script>
+</body>
+</html>
