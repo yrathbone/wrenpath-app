@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WrenPath — Honest resume coaching</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wordmark">WrenPath</div>
+    <p class="tagline">Yes, you can. Let's find the proof that's already on your resume.</p>
+  </header>
+
+  <main>
+    <section id="step-upload" class="card">
+      <h2>1. Tell us about the role</h2>
+      <p class="hint">
+        Upload your current resume and paste in the job posting you're aiming for.
+        We'll compare them honestly — not just by counting keywords.
+      </p>
+      <form id="analyze-form">
+        <label class="field">
+          <span>Your current resume (.docx, .pdf, or .txt)</span>
+          <input type="file" id="resume-file" accept=".docx,.pdf,.txt" required />
+        </label>
+        <label class="field">
+          <span>Job posting text</span>
+          <textarea id="job-posting" rows="10" placeholder="Paste the full job posting here..." required></textarea>
+        </label>
+        <button type="submit" id="analyze-btn">Analyze my resume</button>
+      </form>
+      <div id="analyze-error" class="error" hidden></div>
+    </section>
+
+    <section id="step-loading" class="card" hidden>
+      <p>Reading your resume and researching the role... this takes a moment.</p>
+    </section>
+
+    <section id="step-results" class="card" hidden>
+      <h2>2. Your honest match report</h2>
+      <div id="grade-badge"></div>
+      <p id="grade-rationale"></p>
+
+      <div class="report-block">
+        <h3>What's already strong</h3>
+        <ul id="strengths-list"></ul>
+      </div>
+
+      <div class="report-block">
+        <h3>Gaps against what this role usually requires</h3>
+        <ul id="gaps-list"></ul>
+      </div>
+
+      <div class="report-block" id="flags-block" hidden>
+        <h3>"Same word, different job" flags</h3>
+        <p class="hint">Words that match on paper but mean something different in context.</p>
+        <ul id="flags-list"></ul>
+      </div>
+
+      <div class="report-block">
+        <h3>How to genuinely grow toward this role</h3>
+        <ul id="growth-list"></ul>
+      </div>
+
+      <p id="fit-note" class="hint"></p>
+    </section>
+
+    <section id="step-questions" class="card" hidden>
+      <h2>3. Be honest with yourself</h2>
+      <p class="hint">
+        Based on what this kind of role usually involves, here are a few things
+        to check against your real experience. Only say yes if it's true —
+        we never add anything you don't confirm.
+      </p>
+      <div id="questions-list"></div>
+
+      <label class="field checkbox-field">
+        <input type="checkbox" id="ats-mode" />
+        <span>Use single-column layout (safer for automated ATS scanners)</span>
+      </label>
+
+      <button type="button" id="generate-btn">Generate my resume</button>
+      <div id="generate-error" class="error" hidden></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>WrenPath is a non-profit tool. We don't store your resume or job posting after your session ends.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
