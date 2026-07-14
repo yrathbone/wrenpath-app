@@ -113,12 +113,15 @@ def analyze(resume_text: str, job_posting: str) -> dict:
     client = anthropic.Anthropic()
     user_prompt = USER_PROMPT_TEMPLATE.format(resume_text=resume_text, job_posting=job_posting)
 
-    response = client.messages.create(
-        model=MODEL,
-        max_tokens=4000,
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": user_prompt}],
-    )
+    try:
+        response = client.messages.create(
+            model=MODEL,
+            max_tokens=4000,
+            system=SYSTEM_PROMPT,
+            messages=[{"role": "user", "content": user_prompt}],
+        )
+    except anthropic.APIError as e:
+        raise CoachError(f"Claude API error: {e}") from e
 
     text = response.content[0].text.strip()
     if text.startswith("```"):

@@ -61,6 +61,8 @@ async def api_analyze(
         result = analyze(resume_text, job_posting)
     except CoachError as e:
         raise HTTPException(status_code=502, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {type(e).__name__}: {e}")
 
     return result
 
