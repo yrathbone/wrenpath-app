@@ -123,7 +123,13 @@ def analyze(resume_text: str, job_posting: str) -> dict:
     except anthropic.APIError as e:
         raise CoachError(f"Claude API error: {e}") from e
 
-    text = response.content[0].text.strip()
+    # The model may return non-text blocks (e.g. a ThinkingBlock) before
+    # the actual text response - find the text block rather than assuming
+    # it's content[0].
+    text_block = next((b for b in response.content if getattr(b, "type", None) == "text"), None)
+    if text_block is None:
+        raise CoachError("Claude response contained no text content block.")
+    text = text_block.text.strip()
     if text.startswith("```"):
         text = text.split("```")[1]
         if text.startswith("json"):
