@@ -46,6 +46,14 @@ body {
   font-size: 1.15rem;
   color: var(--blue);
   text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.nav-logo img {
+  height: 34px;
+  width: auto;
+  display: block;
 }
 
 .nav-links {
@@ -105,6 +113,11 @@ body {
 
 .hero .wordmark {
   font-size: 2.75rem;
+}
+
+.hero-logo {
+  height: 90px;
+  width: auto;
 }
 
 .hero-tagline {
