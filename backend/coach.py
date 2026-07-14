@@ -116,7 +116,7 @@ def analyze(resume_text: str, job_posting: str) -> dict:
     try:
         response = client.messages.create(
             model=MODEL,
-            max_tokens=4000,
+            max_tokens=8000,  # extended thinking tokens count against this too
             system=SYSTEM_PROMPT,
             messages=[{"role": "user", "content": user_prompt}],
         )
