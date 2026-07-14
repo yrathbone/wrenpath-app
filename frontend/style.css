@@ -22,6 +22,8 @@
 
 * { box-sizing: border-box; }
 
+[hidden] { display: none !important; }
+
 body {
   margin: 0;
   font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -90,6 +92,48 @@ h2 {
   font-size: 0.95rem;
   background: var(--bg);
   color: var(--ink);
+}
+
+.mode-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 560px) {
+  .mode-choices { flex-direction: row; }
+}
+
+.mode-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  text-align: left;
+  background: var(--bg);
+  color: var(--ink);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.mode-btn:hover {
+  border-color: var(--blue);
+  opacity: 1;
+}
+
+.mode-btn strong {
+  font-size: 1.05rem;
+  color: var(--blue);
+}
+
+.mode-btn span {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.4;
 }
 
 .checkbox-field {

@@ -3,39 +3,94 @@
 // want a resume + job posting sitting in a database).
 let resumeData = null;
 let reflectiveQuestions = [];
+let currentMode = null; // "build" or "analyze"
 
-const analyzeForm = document.getElementById("analyze-form");
-const analyzeBtn = document.getElementById("analyze-btn");
-const analyzeError = document.getElementById("analyze-error");
+const stepMode = document.getElementById("step-mode");
 const stepUpload = document.getElementById("step-upload");
 const stepLoading = document.getElementById("step-loading");
 const stepResults = document.getElementById("step-results");
 const stepQuestions = document.getElementById("step-questions");
+
+const uploadHeading = document.getElementById("upload-heading");
+const uploadHint = document.getElementById("upload-hint");
+const jobPostingField = document.getElementById("job-posting-field");
+const jobPostingInput = document.getElementById("job-posting");
+const loadingText = document.getElementById("loading-text");
+
+const analyzeForm = document.getElementById("analyze-form");
+const analyzeBtn = document.getElementById("analyze-btn");
+const analyzeError = document.getElementById("analyze-error");
+
+const matchModeResults = document.getElementById("match-mode-results");
+const buildModeResults = document.getElementById("build-mode-results");
+
 const generateBtn = document.getElementById("generate-btn");
 const generateError = document.getElementById("generate-error");
+
+const MODE_CONFIG = {
+  build: {
+    endpoint: "/api/build",
+    uploadHeading: "1. Tell us about you",
+    uploadHint: "Upload your current resume. We'll research what your role typically involves today and help you rebuild it honestly — no job posting required.",
+    loadingText: "Reading your resume and researching your role... this takes a moment.",
+    needsJobPosting: false,
+  },
+  analyze: {
+    endpoint: "/api/analyze",
+    uploadHeading: "1. Tell us about the role",
+    uploadHint: "Upload your current resume and paste in the job posting you're aiming for. We'll compare them honestly — not just by counting keywords.",
+    loadingText: "Reading your resume and comparing it to the posting... this takes a moment.",
+    needsJobPosting: true,
+  },
+};
+
+document.querySelectorAll(".mode-btn").forEach((btn) => {
+  btn.addEventListener("click", () => selectMode(btn.dataset.mode));
+});
+
+function selectMode(mode) {
+  currentMode = mode;
+  const config = MODE_CONFIG[mode];
+
+  uploadHeading.textContent = config.uploadHeading;
+  uploadHint.textContent = config.uploadHint;
+  jobPostingField.hidden = !config.needsJobPosting;
+  jobPostingInput.required = config.needsJobPosting;
+  loadingText.textContent = config.loadingText;
+
+  stepMode.hidden = true;
+  stepUpload.hidden = false;
+}
 
 analyzeForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   analyzeError.hidden = true;
 
+  const config = MODE_CONFIG[currentMode];
   const fileInput = document.getElementById("resume-file");
-  const jobPosting = document.getElementById("job-posting").value.trim();
+  const jobPosting = jobPostingInput.value.trim();
 
-  if (!fileInput.files.length || !jobPosting) {
-    showError(analyzeError, "Please upload a resume and paste the job posting.");
+  if (!fileInput.files.length) {
+    showError(analyzeError, "Please upload a resume.");
+    return;
+  }
+  if (config.needsJobPosting && !jobPosting) {
+    showError(analyzeError, "Please paste the job posting.");
     return;
   }
 
   const formData = new FormData();
   formData.append("resume_file", fileInput.files[0]);
-  formData.append("job_posting", jobPosting);
+  if (config.needsJobPosting) {
+    formData.append("job_posting", jobPosting);
+  }
 
   analyzeBtn.disabled = true;
   stepUpload.hidden = true;
   stepLoading.hidden = false;
 
   try {
-    const res = await fetch("/api/analyze", { method: "POST", body: formData });
+    const res = await fetch(config.endpoint, { method: "POST", body: formData });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       throw new Error(err.detail || `Request failed (${res.status})`);
@@ -44,7 +99,15 @@ analyzeForm.addEventListener("submit", async (e) => {
     resumeData = data.resume_data;
     reflectiveQuestions = data.reflective_questions || [];
 
-    renderMatchReport(data.match_report);
+    if (currentMode === "analyze") {
+      matchModeResults.hidden = false;
+      buildModeResults.hidden = true;
+      renderMatchReport(data.match_report);
+    } else {
+      matchModeResults.hidden = true;
+      buildModeResults.hidden = false;
+      document.getElementById("role-research-summary").textContent = data.role_research_summary || "";
+    }
     renderQuestions(reflectiveQuestions);
 
     stepLoading.hidden = true;

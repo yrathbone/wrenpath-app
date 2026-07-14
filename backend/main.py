@@ -3,7 +3,10 @@ WrenPath backend - FastAPI app serving both the API and the static frontend.
 
 Endpoints:
   POST /api/analyze  - old resume file + job posting text -> resume_data,
-                        match_report, reflective_questions
+                        match_report, reflective_questions (comparison tool)
+  POST /api/build     - old resume file only -> resume_data,
+                        role_research_summary, reflective_questions
+                        (resume-builder tool, uses live web search)
   POST /api/generate - final resume_data + ats_mode -> .docx file
 
 Run locally:
@@ -19,6 +22,7 @@ from pydantic import BaseModel
 
 from extractor import extract_text
 from coach import analyze, CoachError
+from builder import build, BuilderError
 from resume_builder import build_resume_bytes
 
 app = FastAPI(title="WrenPath API")
@@ -60,6 +64,30 @@ async def api_analyze(
     try:
         result = analyze(resume_text, job_posting)
     except CoachError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {type(e).__name__}: {e}")
+
+    return result
+
+
+@app.post("/api/build")
+async def api_build(resume_file: UploadFile = File(...)):
+    content = await resume_file.read()
+    if len(content) > MAX_UPLOAD_BYTES:
+        raise HTTPException(status_code=413, detail="File too large (5 MB max).")
+
+    try:
+        resume_text = extract_text(resume_file.filename, content)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    if not resume_text.strip():
+        raise HTTPException(status_code=400, detail="Could not extract any text from that file.")
+
+    try:
+        result = build(resume_text)
+    except BuilderError as e:
         raise HTTPException(status_code=502, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unexpected error: {type(e).__name__}: {e}")

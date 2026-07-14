@@ -13,20 +13,31 @@
   </header>
 
   <main>
-    <section id="step-upload" class="card">
-      <h2>1. Tell us about the role</h2>
-      <p class="hint">
-        Upload your current resume and paste in the job posting you're aiming for.
-        We'll compare them honestly — not just by counting keywords.
-      </p>
+    <section id="step-mode" class="card">
+      <h2>Which do you need?</h2>
+      <div class="mode-choices">
+        <button type="button" class="mode-btn" id="mode-build" data-mode="build">
+          <strong>Build my resume</strong>
+          <span>Just upload your old resume. We'll research what your role typically involves today and help you rebuild it — no job posting needed.</span>
+        </button>
+        <button type="button" class="mode-btn" id="mode-analyze" data-mode="analyze">
+          <strong>Check my fit for a job</strong>
+          <span>You've found a specific opening. Upload your resume and paste the posting for an honest match report.</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="step-upload" class="card" hidden>
+      <h2 id="upload-heading">1. Tell us about you</h2>
+      <p class="hint" id="upload-hint"></p>
       <form id="analyze-form">
         <label class="field">
           <span>Your current resume (.docx, .pdf, or .txt)</span>
           <input type="file" id="resume-file" accept=".docx,.pdf,.txt" required />
         </label>
-        <label class="field">
+        <label class="field" id="job-posting-field">
           <span>Job posting text</span>
-          <textarea id="job-posting" rows="10" placeholder="Paste the full job posting here..." required></textarea>
+          <textarea id="job-posting" rows="10" placeholder="Paste the full job posting here..."></textarea>
         </label>
         <button type="submit" id="analyze-btn">Analyze my resume</button>
       </form>
@@ -34,36 +45,44 @@
     </section>
 
     <section id="step-loading" class="card" hidden>
-      <p>Reading your resume and researching the role... this takes a moment.</p>
+      <p id="loading-text">Reading your resume and researching the role... this takes a moment.</p>
     </section>
 
     <section id="step-results" class="card" hidden>
-      <h2>2. Your honest match report</h2>
-      <div id="grade-badge"></div>
-      <p id="grade-rationale"></p>
+      <h2>2. Your honest report</h2>
 
-      <div class="report-block">
-        <h3>What's already strong</h3>
-        <ul id="strengths-list"></ul>
+      <div id="match-mode-results">
+        <div id="grade-badge"></div>
+        <p id="grade-rationale"></p>
+
+        <div class="report-block">
+          <h3>What's already strong</h3>
+          <ul id="strengths-list"></ul>
+        </div>
+
+        <div class="report-block">
+          <h3>Gaps against what this role usually requires</h3>
+          <ul id="gaps-list"></ul>
+        </div>
+
+        <div class="report-block" id="flags-block" hidden>
+          <h3>"Same word, different job" flags</h3>
+          <p class="hint">Words that match on paper but mean something different in context.</p>
+          <ul id="flags-list"></ul>
+        </div>
+
+        <div class="report-block">
+          <h3>How to genuinely grow toward this role</h3>
+          <ul id="growth-list"></ul>
+        </div>
+
+        <p id="fit-note" class="hint"></p>
       </div>
 
-      <div class="report-block">
-        <h3>Gaps against what this role usually requires</h3>
-        <ul id="gaps-list"></ul>
+      <div id="build-mode-results" class="report-block" hidden>
+        <h3>What we found</h3>
+        <p id="role-research-summary"></p>
       </div>
-
-      <div class="report-block" id="flags-block" hidden>
-        <h3>"Same word, different job" flags</h3>
-        <p class="hint">Words that match on paper but mean something different in context.</p>
-        <ul id="flags-list"></ul>
-      </div>
-
-      <div class="report-block">
-        <h3>How to genuinely grow toward this role</h3>
-        <ul id="growth-list"></ul>
-      </div>
-
-      <p id="fit-note" class="hint"></p>
     </section>
 
     <section id="step-questions" class="card" hidden>

@@ -13,6 +13,8 @@ import os
 
 import anthropic
 
+from llm_utils import extract_final_text, extract_json_object
+
 MODEL = os.environ.get("WRENPATH_MODEL", "claude-sonnet-5")
 
 SYSTEM_PROMPT = """You are Wren, a career coach helping a job seeker \
@@ -123,20 +125,8 @@ def analyze(resume_text: str, job_posting: str) -> dict:
     except anthropic.APIError as e:
         raise CoachError(f"Claude API error: {e}") from e
 
-    # The model may return non-text blocks (e.g. a ThinkingBlock) before
-    # the actual text response - find the text block rather than assuming
-    # it's content[0].
-    text_block = next((b for b in response.content if getattr(b, "type", None) == "text"), None)
-    if text_block is None:
-        raise CoachError("Claude response contained no text content block.")
-    text = text_block.text.strip()
-    if text.startswith("```"):
-        text = text.split("```")[1]
-        if text.startswith("json"):
-            text = text[4:]
-        text = text.strip()
-
+    text = extract_final_text(response)
     try:
-        return json.loads(text)
-    except json.JSONDecodeError as e:
+        return extract_json_object(text)
+    except (ValueError, json.JSONDecodeError) as e:
         raise CoachError(f"Could not parse model response as JSON: {e}") from e
