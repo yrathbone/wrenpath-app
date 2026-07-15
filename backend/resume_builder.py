@@ -117,38 +117,49 @@ def build_resume_bytes(data: dict, ats_mode: bool = False) -> bytes:
         run = p.add_run(para_text)
         style_run(run)
 
-    doc.add_section(WD_SECTION.CONTINUOUS)
-    set_page_geometry(doc.sections[-1])
-    add_heading_bar(doc, "CORE SKILLS & EXPERTISE")
+    # Skills, experience, and education sections only render if there's
+    # actual content - an empty list used to still print the heading bar
+    # with nothing underneath it (e.g. someone using the start-from-scratch
+    # wizard who added zero experience entries got an orphaned
+    # "PROFESSIONAL EXPERIENCE" heading followed immediately by EDUCATION).
+    if data["skills"]:
+        doc.add_section(WD_SECTION.CONTINUOUS)
+        set_page_geometry(doc.sections[-1])
+        add_heading_bar(doc, "CORE SKILLS & EXPERTISE")
 
-    doc.add_section(WD_SECTION.CONTINUOUS)
-    set_page_geometry(doc.sections[-1])
-    set_columns(doc.sections[-1], 1 if ats_mode else 2)
-    for skill in data["skills"]:
-        add_bullet(doc, skill)
+        doc.add_section(WD_SECTION.CONTINUOUS)
+        set_page_geometry(doc.sections[-1])
+        set_columns(doc.sections[-1], 1 if ats_mode else 2)
+        for skill in data["skills"]:
+            add_bullet(doc, skill)
 
+    # Always start a fresh single-column section here, regardless of
+    # whether there's experience content - this undoes the skills
+    # section's column count (if it was 2), and EDUCATION below always
+    # needs single column too.
     doc.add_section(WD_SECTION.CONTINUOUS)
     set_page_geometry(doc.sections[-1])
     set_columns(doc.sections[-1], 1)
-    add_heading_bar(doc, "PROFESSIONAL EXPERIENCE")
 
-    for i, job in enumerate(data["experience"]):
-        p = doc.add_paragraph()
-        if i > 0:
-            p.paragraph_format.space_before = Pt(12)
-        title_run = p.add_run(job["title"])
-        style_run(title_run, bold=True)
-        p.add_run().add_break()
-        subtitle_run = p.add_run(job["subtitle"])
-        style_run(subtitle_run)
-        for bullet in job["bullets"]:
-            add_bullet(doc, bullet)
+    if data["experience"]:
+        add_heading_bar(doc, "PROFESSIONAL EXPERIENCE")
+        for i, job in enumerate(data["experience"]):
+            p = doc.add_paragraph()
+            if i > 0:
+                p.paragraph_format.space_before = Pt(12)
+            title_run = p.add_run(job["title"])
+            style_run(title_run, bold=True)
+            p.add_run().add_break()
+            subtitle_run = p.add_run(job["subtitle"])
+            style_run(subtitle_run)
+            for bullet in job["bullets"]:
+                add_bullet(doc, bullet)
 
-    edu_heading = add_heading_bar(doc, "EDUCATION")
-    edu_heading.paragraph_format.space_before = Pt(6)
-
-    for entry in data["education"]:
-        add_bullet(doc, entry)
+    if data["education"]:
+        edu_heading = add_heading_bar(doc, "EDUCATION")
+        edu_heading.paragraph_format.space_before = Pt(6)
+        for entry in data["education"]:
+            add_bullet(doc, entry)
 
     buffer = io.BytesIO()
     doc.save(buffer)

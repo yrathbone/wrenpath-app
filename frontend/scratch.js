@@ -25,6 +25,25 @@ function showError(el, message) {
 }
 
 // --- Step 1: Basics ---------------------------------------------------
+
+// Auto-format a US phone number to XXX-XXX-XXXX once the person finishes
+// typing it (on blur, not on every keystroke, so we don't fight their
+// cursor position while they're still typing). Leaves anything that isn't
+// a clean 10-digit (or 11-digit with a leading 1) number alone rather than
+// risk mangling an international number or one with an extension.
+function formatPhoneNumber(value) {
+  let digits = value.replace(/\D/g, "");
+  if (digits.length === 11 && digits[0] === "1") {
+    digits = digits.slice(1);
+  }
+  if (digits.length !== 10) return value;
+  return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
+
+document.getElementById("basics-phone").addEventListener("blur", (e) => {
+  e.target.value = formatPhoneNumber(e.target.value);
+});
+
 document.getElementById("basics-form").addEventListener("submit", (e) => {
   e.preventDefault();
   state.basics = {
@@ -150,6 +169,13 @@ document.getElementById("entry-confirm-btn").addEventListener("click", () => {
   entryFormWrap.hidden = false;
 });
 
+document.getElementById("entry-discard-btn").addEventListener("click", () => {
+  pendingEntry = null;
+  entryReview.hidden = true;
+  entryForm.reset();
+  entryFormWrap.hidden = false;
+});
+
 function renderExperienceList() {
   const el = document.getElementById("experience-list");
   el.innerHTML = "";
@@ -177,6 +203,16 @@ function renderExperienceList() {
 }
 
 document.getElementById("experience-continue-btn").addEventListener("click", () => {
+  // Fixed 2026-07-14: this used to let you navigate away while a drafted
+  // entry was still sitting unconfirmed, silently losing it - the drafted
+  // bullets and questions existed on screen but were never in state.experience.
+  if (pendingEntry) {
+    showError(
+      document.getElementById("entry-error"),
+      "You have an experience entry waiting for your review just above — click \"Looks good, add it\" or \"Discard this one\" first."
+    );
+    return;
+  }
   goToStep("education");
 });
 
