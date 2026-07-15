@@ -299,6 +299,7 @@ h2 {
   align-items: flex-start;
   gap: 0.4rem;
   text-align: left;
+  text-decoration: none;
   background: var(--bg);
   color: var(--ink);
   border: 2px solid var(--border);
@@ -419,4 +420,100 @@ footer {
   color: var(--muted);
   font-size: 0.85rem;
   padding: 1.5rem 1rem 2.5rem;
+}
+
+/* --- Start-from-scratch wizard --- */
+
+.wizard-progress {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+}
+
+.wizard-step-label {
+  color: var(--muted);
+}
+
+.wizard-step-label.active {
+  color: var(--blue);
+  font-weight: 700;
+}
+
+.field-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.field-row .field {
+  flex: 1;
+}
+
+.entry-form-card {
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-top: 1rem;
+}
+
+.entry-form-card h3 {
+  margin-top: 0;
+  font-size: 1rem;
+}
+
+.entry-summary-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.entry-summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.entry-remove-btn {
+  background: transparent;
+  color: var(--error);
+  border: 1px solid var(--error);
+  border-radius: 6px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tag-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0 1.5rem;
+}
+
+.skill-tag {
+  background: var(--blue-light);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.35rem 0.5rem 0.35rem 0.9rem;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.skill-tag button {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 0.2rem;
 }

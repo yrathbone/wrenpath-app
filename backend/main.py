@@ -7,6 +7,11 @@ Endpoints:
   POST /api/build     - old resume file only -> resume_data,
                         role_research_summary, reflective_questions
                         (resume-builder tool, uses live web search)
+  POST /api/scratch-entry    - one experience entry's raw facts -> drafted
+                        bullets + reflective questions (start-from-scratch
+                        tool, per entry)
+  POST /api/scratch-finalize - full assembled experience/education/skills
+                        -> suggested summary + suggested skills
   POST /api/generate - final resume_data + ats_mode -> .docx file
 
 Run locally:
@@ -23,6 +28,7 @@ from pydantic import BaseModel
 from extractor import extract_text
 from coach import analyze, CoachError
 from builder import build, BuilderError
+from scratch import draft_entry, finalize, ScratchError
 from resume_builder import build_resume_bytes
 
 app = FastAPI(title="WrenPath API")
@@ -88,6 +94,48 @@ async def api_build(resume_file: UploadFile = File(...)):
     try:
         result = build(resume_text)
     except BuilderError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {type(e).__name__}: {e}")
+
+    return result
+
+
+class ScratchEntryRequest(BaseModel):
+    entry_type: str  # "work" | "volunteer" | "school"
+    title: str
+    organization: str
+    dates: str
+    description: str
+
+
+@app.post("/api/scratch-entry")
+async def api_scratch_entry(req: ScratchEntryRequest):
+    if not req.title.strip() or not req.description.strip():
+        raise HTTPException(status_code=400, detail="A role/title and a description of what you did are both required.")
+
+    try:
+        result = draft_entry(req.entry_type, req.title, req.organization, req.dates, req.description)
+    except ScratchError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {type(e).__name__}: {e}")
+
+    return result
+
+
+class ScratchFinalizeRequest(BaseModel):
+    name: str
+    experience: list
+    education: list
+    existing_skills: list = []
+
+
+@app.post("/api/scratch-finalize")
+async def api_scratch_finalize(req: ScratchFinalizeRequest):
+    try:
+        result = finalize(req.name, req.experience, req.education, req.existing_skills)
+    except ScratchError as e:
         raise HTTPException(status_code=502, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unexpected error: {type(e).__name__}: {e}")

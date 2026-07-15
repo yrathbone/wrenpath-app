@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Build your first resume — WrenPath</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo"><img src="logo.svg" alt="WrenPath" /></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="learn.html">Learn</a>
+      <a href="tool.html" class="nav-cta nav-active">Try the Tool</a>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <h1>Build your first resume</h1>
+    <p class="tagline">No resume yet? Let's build one together, one honest step at a time.</p>
+  </header>
+
+  <main>
+    <div class="wizard-progress" id="wizard-progress">
+      <span class="wizard-step-label active" data-step="basics">1. About you</span>
+      <span class="wizard-step-label" data-step="experience">2. Experience</span>
+      <span class="wizard-step-label" data-step="education">3. Education</span>
+      <span class="wizard-step-label" data-step="skills">4. Skills</span>
+      <span class="wizard-step-label" data-step="review">5. Review</span>
+    </div>
+
+    <!-- Step 1: Basics -->
+    <section class="card wizard-step" id="step-basics">
+      <h2>Let's start with the basics</h2>
+      <form id="basics-form">
+        <label class="field"><span>Full name</span><input type="text" id="basics-name" required /></label>
+        <div class="field-row">
+          <label class="field"><span>City</span><input type="text" id="basics-city" /></label>
+          <label class="field"><span>State</span><input type="text" id="basics-state" /></label>
+        </div>
+        <label class="field"><span>Phone</span><input type="tel" id="basics-phone" /></label>
+        <label class="field"><span>Email</span><input type="email" id="basics-email" required /></label>
+        <label class="field"><span>LinkedIn (optional)</span><input type="text" id="basics-linkedin" placeholder="linkedin.com/in/..." /></label>
+        <button type="submit">Next: Experience &rarr;</button>
+      </form>
+    </section>
+
+    <!-- Step 2: Experience -->
+    <section class="card wizard-step" id="step-experience" hidden>
+      <h2>Tell us about your experience</h2>
+      <p class="hint">This can be a job, volunteer work, or a school activity like a club or team. Add as many as you have — even one is a great start.</p>
+
+      <div id="experience-list"></div>
+
+      <div id="entry-form-wrap" class="entry-form-card">
+        <h3>Add an experience</h3>
+        <form id="entry-form">
+          <label class="field">
+            <span>What kind of experience is this?</span>
+            <select id="entry-type">
+              <option value="work">Job</option>
+              <option value="volunteer">Volunteer</option>
+              <option value="school">School activity / club</option>
+            </select>
+          </label>
+          <label class="field"><span>Title or role</span><input type="text" id="entry-title" placeholder="e.g. Cashier, Volunteer Tutor, Club President" required /></label>
+          <label class="field"><span>Organization, school, or place</span><input type="text" id="entry-org" required /></label>
+          <label class="field"><span>Location (optional)</span><input type="text" id="entry-location" placeholder="City, ST" /></label>
+          <label class="field"><span>When?</span><input type="text" id="entry-dates" placeholder='e.g. "Jun 2024 – Present" or "2023"' /></label>
+          <label class="field">
+            <span>In your own words, what did you do there?</span>
+            <textarea id="entry-description" rows="4" placeholder="Just describe it naturally — we'll help turn it into resume language." required></textarea>
+          </label>
+          <button type="submit" id="entry-submit-btn">Add this experience</button>
+        </form>
+        <div id="entry-error" class="error" hidden></div>
+      </div>
+
+      <div id="entry-loading" class="hint" hidden>Thinking about your role and looking up what it typically involves...</div>
+
+      <div id="entry-review" class="entry-form-card" hidden>
+        <h3>Here's what we drafted from what you told us</h3>
+        <ul id="entry-drafted-bullets"></ul>
+        <p class="hint">A few things people in similar roles often also do. Only say yes if it's true for you:</p>
+        <div id="entry-questions"></div>
+        <button type="button" id="entry-confirm-btn">Looks good, add it</button>
+      </div>
+
+      <button type="button" id="experience-continue-btn" class="btn-secondary">Continue to Education &rarr;</button>
+    </section>
+
+    <!-- Step 3: Education -->
+    <section class="card wizard-step" id="step-education" hidden>
+      <h2>Education</h2>
+      <p class="hint">High school, college, trade school — whatever applies. Add as many as you like, or skip if none yet.</p>
+      <div id="education-list"></div>
+      <form id="education-form">
+        <label class="field"><span>Degree or level</span><input type="text" id="edu-degree" placeholder="e.g. High School Diploma, Some College" required /></label>
+        <label class="field"><span>School name</span><input type="text" id="edu-school" required /></label>
+        <label class="field"><span>City, State (optional)</span><input type="text" id="edu-location" /></label>
+        <label class="field"><span>Graduation (or "Expected 2027", or "In Progress")</span><input type="text" id="edu-date" /></label>
+        <button type="submit">Add education</button>
+      </form>
+      <button type="button" id="education-continue-btn" class="btn-secondary">Continue to Skills &rarr;</button>
+    </section>
+
+    <!-- Step 4: Skills -->
+    <section class="card wizard-step" id="step-skills" hidden>
+      <h2>Any skills you already know you have?</h2>
+      <p class="hint">Optional — type any that come to mind, one at a time. We'll also suggest a few more based on your experience in the next step.</p>
+      <form id="skill-form">
+        <label class="field"><span>Skill</span><input type="text" id="skill-input" placeholder="e.g. Bilingual, Microsoft Excel" /></label>
+        <button type="submit">Add skill</button>
+      </form>
+      <ul id="skills-list" class="tag-list"></ul>
+      <button type="button" id="skills-continue-btn" class="btn-secondary">Continue to Review &rarr;</button>
+    </section>
+
+    <!-- Step 5: Review -->
+    <section class="card wizard-step" id="step-review" hidden>
+      <h2>Almost done</h2>
+      <div id="review-loading" class="hint">Putting together a summary and a few more skill ideas...</div>
+      <div id="review-content" hidden>
+        <label class="field">
+          <span>Professional summary (edit as you like)</span>
+          <textarea id="review-summary" rows="4"></textarea>
+        </label>
+        <div class="report-block">
+          <h3>Suggested additional skills — check any that are true</h3>
+          <div id="suggested-skills-list"></div>
+        </div>
+        <label class="field checkbox-field">
+          <input type="checkbox" id="ats-mode" />
+          <span>Use single-column layout (safer for automated ATS scanners)</span>
+        </label>
+        <button type="button" id="generate-btn">Generate my resume</button>
+        <div id="generate-error" class="error" hidden></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>WrenPath is a non-profit tool. We don't store your information after your session ends.</p>
+  </footer>
+
+  <script src="scratch.js"></script>
+</body>
+</html>
