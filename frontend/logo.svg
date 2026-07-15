@@ -24,13 +24,13 @@
   <circle cx="42" cy="42" r="4" fill="#fff3da"/>
 
   <!-- body -->
-  <ellipse cx="140" cy="140" rx="52" ry="42" fill="#6f97cc"/>
+  <ellipse cx="140" cy="140" rx="52" ry="42" fill="#0047ab"/>
 
   <!-- wing -->
-  <path d="M 108 122 Q 138 104 158 130 Q 136 152 108 146 Z" fill="#5a7dab"/>
+  <path d="M 108 122 Q 138 104 158 130 Q 136 152 108 146 Z" fill="#003580"/>
 
   <!-- head -->
-  <circle cx="186" cy="103" r="29" fill="#7ea1d1"/>
+  <circle cx="186" cy="103" r="29" fill="#3d74d6"/>
 
   <!-- beak -->
   <polygon points="211,98 233,106 211,116" fill="#e0965a"/>
@@ -42,6 +42,6 @@
 
 <!-- WORDMARK -->
 <g transform="translate(300,148)" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-weight="800" font-size="64">
-  <text x="0" y="0" fill="#6f97cc">Wren<tspan fill="#e0a641">Path</tspan></text>
+  <text x="0" y="0" fill="#0047ab">Wren<tspan fill="#e0a641">Path</tspan></text>
 </g>
 </svg>

@@ -17,9 +17,9 @@
 <circle cx="42" cy="42" r="9" fill="#fbd490"/>
 <circle cx="42" cy="42" r="4.5" fill="#fff3da"/>
 
-<ellipse cx="140" cy="140" rx="52" ry="42" fill="#6f97cc"/>
-<path d="M 108 122 Q 138 104 158 130 Q 136 152 108 146 Z" fill="#5a7dab"/>
-<circle cx="186" cy="103" r="29" fill="#7ea1d1"/>
+<ellipse cx="140" cy="140" rx="52" ry="42" fill="#0047ab"/>
+<path d="M 108 122 Q 138 104 158 130 Q 136 152 108 146 Z" fill="#003580"/>
+<circle cx="186" cy="103" r="29" fill="#3d74d6"/>
 <polygon points="211,98 233,106 211,116" fill="#e0965a"/>
 <circle cx="193" cy="96" r="5.5" fill="#fdfdfd"/>
 <circle cx="194.5" cy="96" r="2.6" fill="#22292f"/>

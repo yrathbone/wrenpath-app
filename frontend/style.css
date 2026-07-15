@@ -1,6 +1,6 @@
 :root {
-  --blue: #6f97cc;
-  --blue-light: #cadcf2;
+  --blue: #0047ab; /* Cobalt Blue */
+  --blue-light: #d3e0f5;
   --ink: #22292f;
   --muted: #5b6670;
   --bg: #fafbfc;
@@ -11,12 +11,13 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --blue: #5087e0; /* brighter cobalt for legibility against near-black */
+    --blue-light: #23375c;
     --ink: #e8ecef;
     --muted: #a7b0b8;
     --bg: #14181b;
     --card-bg: #1c2226;
     --border: #2b3338;
-    --blue-light: #263a52;
   }
 }
 
