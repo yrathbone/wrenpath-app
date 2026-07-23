@@ -30,14 +30,14 @@ const generateError = document.getElementById("generate-error");
 const MODE_CONFIG = {
   build: {
     endpoint: "/api/build",
-    uploadHeading: "1. Tell us about you",
+    uploadHeading: "1. Waypoint: Tell us about you",
     uploadHint: "Upload your current resume. We'll research what your role typically involves today and help you rebuild it honestly — no job posting required.",
     loadingText: "Reading your resume and researching your role... this takes a moment.",
     needsJobPosting: false,
   },
   analyze: {
     endpoint: "/api/analyze",
-    uploadHeading: "1. Tell us about the role",
+    uploadHeading: "1. Landing Spot: Tell us about the role",
     uploadHint: "Upload your current resume and paste in the job posting you're aiming for. We'll compare them honestly — not just by counting keywords.",
     loadingText: "Reading your resume and comparing it to the posting... this takes a moment.",
     needsJobPosting: true,
