@@ -47,6 +47,19 @@ app.add_middleware(
 MAX_UPLOAD_BYTES = 5 * 1024 * 1024  # 5 MB - old resumes are small text documents
 
 
+# StaticFiles sends no Cache-Control header by default, so browsers fall back
+# to heuristic caching and can keep serving old HTML/JS for a while after a
+# deploy. Force revalidation on every request for the frontend (StaticFiles
+# still returns 304s via ETag/Last-Modified, so this doesn't mean a full
+# re-download every time - just no silently-stale pages after we ship a fix).
+@app.middleware("http")
+async def no_cache_for_frontend(request, call_next):
+    response = await call_next(request)
+    if not request.url.path.startswith("/api/"):
+        response.headers["Cache-Control"] = "no-cache"
+    return response
+
+
 @app.post("/api/analyze")
 async def api_analyze(
     resume_file: UploadFile = File(...),
