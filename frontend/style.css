@@ -383,6 +383,11 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   font-size: 0.92rem;
 }
 
+.loading-emphasis {
+  color: var(--error);
+  font-weight: 700;
+}
+
 .success {
   color: var(--blue);
   margin-top: 0.75rem;
