@@ -32,14 +32,14 @@ const MODE_CONFIG = {
     endpoint: "/api/build",
     uploadHeading: "1. Waypoint: Tell us about you",
     uploadHint: "Upload your current resume. We'll research what your role typically involves today and help you rebuild it honestly — no job posting required.",
-    loadingText: "Reading your resume and researching your role... this takes a moment.",
+    loadingText: "Reading your resume and researching your role — this takes about 30-60 seconds. Please don't refresh or close this page while we work.",
     needsJobPosting: false,
   },
   analyze: {
     endpoint: "/api/analyze",
     uploadHeading: "1. Landing Spot: Tell us about the role",
     uploadHint: "Upload your current resume and paste in the job posting you're aiming for. We'll compare them honestly — not just by counting keywords.",
-    loadingText: "Reading your resume and comparing it to the posting... this takes a moment.",
+    loadingText: "Reading your resume and comparing it to the posting — this takes about 30-60 seconds. Please don't refresh or close this page while we work.",
     needsJobPosting: true,
   },
 };
