@@ -216,6 +216,21 @@ main {
   font-size: 0.9rem;
 }
 
+.video-card { cursor: default; }
+.video-card:hover { border-color: var(--border); }
+
+.coming-soon {
+  display: inline-block;
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.1rem 0.6rem;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
 .article-body {
   line-height: 1.7;
 }

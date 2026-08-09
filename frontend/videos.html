@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Videos — WrenPath</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo"><img src="logo.svg" alt="WrenPath" /></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="learn.html">Learn</a>
+      <a href="videos.html" class="nav-active">Videos</a>
+      <a href="tool.html" class="nav-cta">Try the Tool</a>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <h1>Videos</h1>
+    <p class="tagline">Quick explainers, for when reading isn't the easiest way in.</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <div id="video-list" class="article-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>WrenPath is a non-profit tool. We don't store your resume or job posting after your session ends.</p>
+  </footer>
+
+  <script src="videos-data.js"></script>
+  <script>
+    const list = document.getElementById("video-list");
+    VIDEOS.forEach((v) => {
+      const card = document.createElement("div");
+      card.className = "article-card video-card";
+
+      if (v.youtube_id) {
+        card.innerHTML = `
+          <strong>${v.title}</strong>
+          <span>${v.summary}</span>
+          <div class="video-embed">
+            <iframe src="https://www.youtube.com/embed/${v.youtube_id}"
+                    title="${v.title}" allowfullscreen></iframe>
+          </div>`;
+      } else {
+        card.innerHTML = `
+          <strong>${v.title} <span class="coming-soon">Coming soon</span></strong>
+          <span>${v.summary} (${v.duration})</span>`;
+      }
+      list.appendChild(card);
+    });
+  </script>
+</body>
+</html>
