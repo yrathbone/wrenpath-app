@@ -227,6 +227,13 @@ generateBtn.addEventListener("click", async () => {
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
+
+    const generateSuccess = document.getElementById("generate-success");
+    generateSuccess.textContent = "Your resume is downloading. Taking you back to the homepage...";
+    generateSuccess.hidden = false;
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 2000);
   } catch (err) {
     showError(generateError, err.message || "Something went wrong generating your resume.");
   } finally {
