@@ -229,16 +229,18 @@ generateBtn.addEventListener("click", async () => {
     URL.revokeObjectURL(url);
 
     const generateSuccess = document.getElementById("generate-success");
-    generateSuccess.textContent = "Your resume is downloading. Taking you back to the homepage...";
+    generateSuccess.textContent = "Your resume is downloading. Need another version (like switching ATS mode)? Generate again below. Otherwise, you're all set.";
     generateSuccess.hidden = false;
-    setTimeout(() => {
-      window.location.href = "index.html";
-    }, 2000);
+    document.getElementById("finish-btn").hidden = false;
   } catch (err) {
     showError(generateError, err.message || "Something went wrong generating your resume.");
   } finally {
     generateBtn.disabled = false;
   }
+});
+
+document.getElementById("finish-btn").addEventListener("click", () => {
+  window.location.href = "index.html";
 });
 
 function showError(el, message) {
